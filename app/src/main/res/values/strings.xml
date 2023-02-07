@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MultiCameraLibrary</string>
+
+
+    <string name="cameraview_default_autofocus_marker">com.example.multicameralibrary.camera.markers.DefaultAutoFocusMarker</string>
+
+    <string name="cameraview_filter_none">com.example.multicameralibrary.camera.filter.NoFilter</string>
+    <string name="cameraview_filter_autofix">com.example.multicameralibrary.camera.filters.AutoFixFilter</string>
+    <string name="cameraview_filter_black_and_white">com.example.multicameralibrary.camera.filters.BlackAndWhiteFilter</string>
+    <string name="cameraview_filter_brightness">com.example.multicameralibrary.camera.filters.BrightnessFilter</string>
+    <string name="cameraview_filter_contrast">com.example.multicameralibrary.camera.filters.ContrastFilter</string>
+    <string name="cameraview_filter_cross_process">com.example.multicameralibrary.camera.filters.CrossProcessFilter</string>
+    <string name="cameraview_filter_documentary">com.example.multicameralibrary.camera.filters.DocumentaryFilter</string>
+    <string name="cameraview_filter_duotone">com.example.multicameralibrary.camera.filters.DuotoneFilter</string>
+    <string name="cameraview_filter_fill_light">com.example.multicameralibrary.camera.filters.FillLightFilter</string>
+    <string name="cameraview_filter_gamma">com.example.multicameralibrary.camera.filters.GammaFilter</string>
+    <string name="cameraview_filter_grain">com.example.multicameralibrary.camera.filters.GrainFilter</string>
+    <string name="cameraview_filter_grayscale">com.example.multicameralibrary.camera.filters.GrayscaleFilter</string>
+    <string name="cameraview_filter_hue">com.example.multicameralibrary.camera.filters.HueFilter</string>
+    <string name="cameraview_filter_invert_colors">com.example.multicameralibrary.camera.filters.InvertColorsFilter</string>
+    <string name="cameraview_filter_lomoish">com.example.multicameralibrary.camera.filters.LomoishFilter</string>
+    <string name="cameraview_filter_posterize">com.example.multicameralibrary.camera.filters.PosterizeFilter</string>
+    <string name="cameraview_filter_saturation">com.example.multicameralibrary.camera.filters.SaturationFilter</string>
+    <string name="cameraview_filter_sepia">com.example.multicameralibrary.camera.filters.SepiaFilter</string>
+    <string name="cameraview_filter_sharpness">com.example.multicameralibrary.camera.filters.SharpnessFilter</string>
+    <string name="cameraview_filter_temperature">com.example.multicameralibrary.camera.filters.TemperatureFilter</string>
+    <string name="cameraview_filter_tint">com.example.multicameralibrary.camera.filters.TintFilter</string>
+    <string name="cameraview_filter_vignette">com.example.multicameralibrary.camera.filters.VignetteFilter</string>
+</resources>

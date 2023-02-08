@@ -2364,7 +2364,7 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
                 @Override
                 public void run() {
                     for (CameraListener listener : mListeners) {
-                        listener.onOrientationChanged(value);
+                        listener.onOrientationChanged(value,getWidth(),getHeight());
                         listener.LocationChanged(getLocation());
                     }
                 }

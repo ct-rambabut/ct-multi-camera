@@ -80,7 +80,7 @@ public abstract class CameraListener {
      * @param orientation either 0, 90, 180 or 270
      */
     @UiThread
-    public void onOrientationChanged(int orientation) { }
+    public void onOrientationChanged(int orientation,int width,int height) { }
 
 
     /**

@@ -1,0 +1,74 @@
+{
+  "CamSettings": {
+    "camShowWaterMark": "y/n",
+    "camWaterMarkUrl": "",
+    "camShowAddress": "y/n",
+    "camShowLatLong": "y/n",
+    "camShowTime": "y/n",
+    "camShowAt": "TOp-Center/Top-Left/Top-Right/Bottom-Left/Bottom-right/Bottom-center/Center",
+    "camShowName": "y/n",
+    "camFlashMode": "ON/OFF/AUTO",
+    "camAspectRatio": "1,1/4,3/16,9",
+    "camType": "picture/video",
+    "camShowGuidBox": "y/n",
+    "camOreControl": "xyz"
+  },
+  "CamImages": [
+    {
+      "imgId": "ABC1",
+      "imgFrontCam": "y/n",
+      "imgSno": "1",
+      "imgName": "title1",
+      "imgMand": "y/n",
+      "imgOverlayLogo": "",
+      "imgOrientation": "L/P",
+      "imgLat": "",
+      "imgLong": "",
+      "imgTime": "",
+      "imgOfflineFlag": "0/1",
+      "imgPath": ""
+    },
+    {
+      "imgId": "ABC2",
+      "imgFrontCam": "y/n",
+      "imgSno": "1",
+      "imgName": "title2",
+      "imgMand": "y/n",
+      "imgOverlayLogo": "",
+      "imgOrientation": "L/P",
+      "imgLat": "",
+      "imgLong": "",
+      "imgTime": "",
+      "imgOfflineFlag": "0/1",
+      "imgPath": ""
+    },
+    {
+      "imgId": "ABC3",
+      "imgFrontCam": "y/n",
+      "imgSno": "1",
+      "imgName": "title3",
+      "imgMand": "y/n",
+      "imgOverlayLogo": "",
+      "imgOrientation": "L/P",
+      "imgLat": "",
+      "imgLong": "",
+      "imgTime": "",
+      "imgOfflineFlag": "0/1",
+      "imgPath": ""
+    },
+    {
+      "imgId": "ABC4",
+      "imgFrontCam": "y/n",
+      "imgSno": "1",
+      "imgName": "title4",
+      "imgMand": "y/n",
+      "imgOverlayLogo": "",
+      "imgOrientation": "L/P",
+      "imgLat": "",
+      "imgLong": "",
+      "imgTime": "",
+      "imgOfflineFlag": "0/1",
+      "imgPath": ""
+    }
+  ]
+}

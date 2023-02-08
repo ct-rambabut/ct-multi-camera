@@ -6,6 +6,7 @@ import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -34,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,8 +77,9 @@ public class CameraActivity extends AppCompatActivity {
     private float animation_flip=180f;
     ConstraintLayout.LayoutParams layoutParams;
 
-    String watermark_logo_path = "https://w7.pngwing.com/pngs/46/326/png-transparent-camera-logo-cameras-electronics-text-photography-thumbnail.png";
-    String camaspectratio = "9:16";//1:1/4:3/full
+    String watermark_logo_path = "https://www.cartradetech.com/images/logo.png";
+    String camaspectratio = "full";//1:1/4:3/full
+    private AppLocationService appLocationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,8 @@ public class CameraActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE); // go full screen
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        appLocationService = new AppLocationService(CameraActivity.this);
 
         //getting json response
         arlImages = (ArrayList<ImageTags>) getIntent().getExtras().getSerializable("data");
@@ -114,7 +120,13 @@ public class CameraActivity extends AppCompatActivity {
             watermark_logo.setVisibility(View.GONE);
         }
 
+        /*water mark position*/
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
+        params.gravity = Gravity.RIGHT|Gravity.BOTTOM;
+        watermark_logo.setLayoutParams(params);
 
+        /*desc position*/
+        txt_desc.setGravity(Gravity.RIGHT|Gravity.TOP);
 
 
         /*image controls*/
@@ -201,9 +213,8 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-
-
         PermissionUtils.requestReadWriteAppPermissions(this);
+
     }
 
     @OnClick(R.id.fab_video)

@@ -48,8 +48,8 @@
 
             <ImageView
                 android:id="@+id/watermark_logo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="bottom"
                 android:layout_margin="10dp"
                 android:src="@mipmap/adroit_watermark" />
@@ -58,7 +58,6 @@
                 android:id="@+id/txt_desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom|right"
                 android:gravity="right|bottom"
                 android:padding="10dp"
                 android:text="Time Stamp \nAddress: Cartrade Kakinada \nTag: By ram"
@@ -78,8 +77,9 @@
 
             <ImageView
                 android:id="@+id/img_overlay"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center"/>
 
             <TextView

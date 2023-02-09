@@ -1,6 +1,9 @@
 package com.example.multicameralibrary;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.multicameralibrary.camera.BitmapCallback;
 import com.example.multicameralibrary.camera.controls.Flash;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.multicameralibrary.camera.CameraListener;
@@ -28,6 +33,7 @@ import com.example.multicameralibrary.camera.VideoResult;
 
 import java.io.File;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,6 +78,17 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     TextView txtAddress;
     @BindView(R.id.fabSettings)
     ImageView fabSettings;
+    @BindView(R.id.image)
+    ImageView imagepreview;
+
+    @BindView(R.id.fab_close_picture)
+    Button fab_close_picture;
+
+    @BindView(R.id.btn_retake_picture)
+    Button btn_retake_picture;
+
+    @BindView(R.id.btn_next_picture)
+    Button btn_next_picture;
 
     int position = 0;
     private ArrayList<ImageTags> arlImages;
@@ -83,7 +100,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     private AppLocationService appLocationService;
 
     MyListener myListener;
-
+    private static WeakReference<PictureResult> image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,14 +174,122 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
         camera_testing.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(@NonNull PictureResult result) {
-                PicturePreviewActivity.setPictureResult(result);
+            public void onPictureTaken(@NonNull PictureResult im) {
+
+
+                /*PicturePreviewActivity.setPictureResult(result);
                 Intent intent = new Intent(CameraActivity.this, PicturePreviewActivity.class);
                 Bundle bundleObject = new Bundle();
                 bundleObject.putInt("pos", position);
                 bundleObject.putSerializable("data", (Serializable) arlImages);
                 intent.putExtras(bundleObject);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                image = im != null ? new WeakReference<>(im) : null;
+
+                if (image == null) {
+                    findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
+                    findViewById(R.id.CL_preview).setVisibility(View.GONE);
+                }else{
+                    findViewById(R.id.cam_view).setVisibility(View.GONE);
+                    findViewById(R.id.CL_preview).setVisibility(View.VISIBLE);
+
+                    im.toBitmap(1000, 1000, new BitmapCallback() {
+                        @Override
+                        public void onBitmapReady(Bitmap bitmap) {
+                            imagepreview.setImageBitmap(bitmap);
+                        }
+                    });
+                }
+
+                btn_retake_picture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
+                        findViewById(R.id.CL_preview).setVisibility(View.GONE);
+                    }
+                });
+
+                btn_next_picture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (image == null) {
+                            return;
+                        }
+
+                        ContextWrapper cw = new ContextWrapper(CameraActivity.this);
+                        File directory = cw.getDir("images", Context.MODE_PRIVATE);
+                        if (directory.exists()) {
+                            directory.delete();
+                        }
+                        String filename = "" + System.currentTimeMillis();
+                        if (!directory.exists()) {
+                            directory.mkdir();
+                        }
+                        File saveTo = new File(directory, filename + ".jpg");
+
+                        image.get().toFile(saveTo, file -> {
+                            if (file != null) {
+                                //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
+                                arlImages.get(position).setImgPath(file.getPath());
+                                position++;
+                                findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
+                                findViewById(R.id.CL_preview).setVisibility(View.GONE);
+                                /*Intent intent = new Intent(CameraActivity.this, CameraActivity.class);
+                                Bundle bundleObject = new Bundle();
+                                bundleObject.putSerializable("data", arlImages);
+                                bundleObject.putInt("pos", position);
+                                bundleObject.putString("lan", "lan");
+                                bundleObject.putString("from", "from");
+                                intent.putExtras(bundleObject);
+                                startActivity(intent);
+                                finish();*/
+                            }
+                        });
+
+                    }
+                });
+
+                fab_close_picture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (image == null) {
+                            return;
+                        }
+
+                        ContextWrapper cw = new ContextWrapper(CameraActivity.this);
+                        File directory = cw.getDir("images", Context.MODE_PRIVATE);
+                        if (directory.exists()) {
+                            directory.delete();
+                        }
+                        String filename = "" + System.currentTimeMillis();
+                        if (!directory.exists()) {
+                            directory.mkdir();
+                        }
+                        File saveTo = new File(directory, filename + ".jpg");
+
+                        image.get().toFile(saveTo, file -> {
+                            if (file != null) {
+                                Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
+                                arlImages.get(position).setImgPath(file.getPath());
+                                Intent intent = new Intent(CameraActivity.this, MainActivity.class);
+                                Bundle bundleObject = new Bundle();
+                                bundleObject.putSerializable("data", arlImages);
+                                bundleObject.putInt("pos", position);
+                                bundleObject.putString("lan", "lan");
+                                bundleObject.putString("from", "from");
+                                intent.putExtras(bundleObject);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
+                    }
+                });
+
+
+
             }
 
             @Override
@@ -356,6 +481,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     public void applyListener() {
         if (Pref.getIn(CameraActivity.this).getCamShowWaterMark()) {
             if (!watermark_logo_path.equals("")) {
+
                 watermark_logo.setVisibility(View.VISIBLE);
                 Glide.with(CameraActivity.this)
                         .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio

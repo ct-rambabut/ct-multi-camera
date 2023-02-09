@@ -7,6 +7,13 @@
     android:background="@color/black"
     tools:context=".CameraActivity">
     <!--app:layout_constraintDimensionRatio="1:1"-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="visible"
+        android:id="@+id/cam_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <com.example.multicameralibrary.camera.CameraView
         android:id="@+id/camera_testing"
         android:layout_width="0dp"
@@ -170,26 +177,82 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_camera_alt_black_24dp"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="@id/fab_video"
-        app:layout_constraintEnd_toStartOf="@id/fab_video"
-        app:layout_constraintTop_toTopOf="@id/fab_video" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_front"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_camera_front_black_24dp"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="@id/fab_video"
-        app:layout_constraintEnd_toStartOf="@id/fab_picture"
-        app:layout_constraintTop_toTopOf="@id/fab_video" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/CL_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:visibility="gone"
+            android:id="@+id/fab_save_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="normal"
+            android:src="@drawable/ic_save_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="MissingConstraints" />
+
+        <LinearLayout
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="@color/white"
+                android:id="@+id/btn_retake_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal"
+                android:text="Retake"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                />
+
+            <Button
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="@color/white"
+                android:id="@+id/btn_next_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal"
+                android:text="Next"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                />
+
+            <Button
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="@color/white"
+                android:id="@+id/fab_close_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="normal"
+                android:text="Close"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

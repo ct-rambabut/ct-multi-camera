@@ -1,17 +1,17 @@
 {
   "CamSettings": {
-    "camShowWaterMark": "y/n",
+    "camShowWaterMark": "",
     "camWaterMarkUrl": "",
-    "camShowAddress": "y/n",
-    "camShowLatLong": "y/n",
-    "camShowTime": "y/n",
-    "camShowAt": "TOp-Center/Top-Left/Top-Right/Bottom-Left/Bottom-right/Bottom-center/Center",
-    "camShowName": "y/n",
-    "camFlashMode": "ON/OFF/AUTO",
-    "camAspectRatio": "1,1/4,3/16,9",
-    "camType": "picture/video",
-    "camShowGuidBox": "y/n",
-    "camOreControl": "xyz"
+    "camShowAddress": "",
+    "camShowLatLong": "",
+    "camShowTime": "",
+    "camShowAt": "",
+    "camShowName": "",
+    "camFlashMode": "",
+    "camAspectRatio": "",
+    "camType": "",
+    "camShowGuidBox": "",
+    "camOreControl": ""
   },
   "CamImages": [
     {

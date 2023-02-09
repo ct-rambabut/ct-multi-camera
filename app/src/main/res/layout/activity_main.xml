@@ -35,7 +35,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-
         <FrameLayout
             android:id="@+id/fl_view"
             android:layout_width="match_parent"
@@ -52,17 +51,33 @@
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"
                 android:layout_margin="10dp"
+                android:visibility="gone"
                 android:src="@mipmap/adroit_watermark" />
 
-            <TextView
-                android:id="@+id/txt_desc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
                 android:gravity="right|bottom"
-                android:padding="10dp"
-                android:text="Time Stamp \nAddress: Cartrade Kakinada \nTag: By ram"
-                android:textColor="@android:color/holo_red_dark" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtTimeStamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time Stamp"
+                    android:visibility="gone"
+                    android:textColor="@android:color/holo_red_dark" />
+                <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address: CarTrade Kakinada"
+                    android:visibility="gone"
+                    android:textColor="@android:color/holo_red_dark" />
+            </LinearLayout>
+
+
 
         </FrameLayout>
 
@@ -80,7 +95,7 @@
                 android:id="@+id/img_overlay"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/txt_title"
@@ -105,6 +120,17 @@
         android:src="@drawable/ic_convert_3208"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fab_picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fab_picture" />
+
+    <ImageView
+        android:id="@+id/fabSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fab_front"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fab_picture" />
 

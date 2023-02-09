@@ -1,7 +1,6 @@
 package com.example.multicameralibrary;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +19,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.multicameralibrary.camera.controls.Flash;
-import com.example.multicameralibrary.camera.overlay.OverlayLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.multicameralibrary.camera.CameraListener;
 import com.example.multicameralibrary.camera.CameraView;
@@ -39,7 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements MyListener {
 
     @BindView(R.id.camera_testing)
     CameraView camera_testing;
@@ -66,16 +63,22 @@ public class CameraActivity extends AppCompatActivity {
     @BindView(R.id.txt_title)
     TextView txt_title;
 
-    @BindView(R.id.txt_desc)
-    TextView txt_desc;
+    @BindView(R.id.txtTimeStamp)
+    TextView txtTimeStamp;
+    @BindView(R.id.txtAddress)
+    TextView txtAddress;
+    @BindView(R.id.fabSettings)
+    ImageView fabSettings;
 
-    int position = 0 ;
+    int position = 0;
     private ArrayList<ImageTags> arlImages;
-    private float animation_flip=180f;
+    private float animation_flip = 180f;
     ConstraintLayout.LayoutParams layoutParams;
 
     String watermark_logo_path = "https://w7.pngwing.com/pngs/46/326/png-transparent-camera-logo-cameras-electronics-text-photography-thumbnail.png";
     String camaspectratio = "9:16";//1:1/4:3/full
+
+    MyListener myListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,8 @@ public class CameraActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE); // go full screen
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        myListener = (MyListener) this;
 
         //getting json response
         arlImages = (ArrayList<ImageTags>) getIntent().getExtras().getSerializable("data");
@@ -96,41 +101,29 @@ public class CameraActivity extends AppCompatActivity {
         camFlash();
 
         /*Camera settings*/
-        if(camaspectratio!="") {
-            if(camaspectratio.equalsIgnoreCase("full")){
+        if (camaspectratio != "") {
+            if (camaspectratio.equalsIgnoreCase("full")) {
                 camera_testing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            }else {
+            } else {
                 layoutParams.dimensionRatio = camaspectratio;
                 camera_testing.setLayoutParams(layoutParams);
             }
         }
 
-        if(watermark_logo_path!=""){
-            watermark_logo.setVisibility(View.VISIBLE);
-            Glide.with(CameraActivity.this)
-                    .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
-                    .into(watermark_logo);
-        }else{
-            watermark_logo.setVisibility(View.GONE);
-        }
-
-
-
-
         /*image controls*/
-        if(arlImages.get(position).getImgOverlayLogo()!=""){
+        if (arlImages.get(position).getImgOverlayLogo() != "") {
             img_overlay.setVisibility(View.VISIBLE);
             Glide.with(CameraActivity.this)
                     .load(arlImages.get(position).getImgOverlayLogo()) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
                     .into(img_overlay);
-        }else{
+        } else {
             img_overlay.setVisibility(View.GONE);
         }
 
-        if(arlImages.get(position).getImgName()!=""){
+        if (arlImages.get(position).getImgName() != "") {
             txt_title.setVisibility(View.VISIBLE);
             txt_title.setText(arlImages.get(position).getImgName());
-        }else{
+        } else {
             txt_title.setVisibility(View.GONE);
         }
 
@@ -167,34 +160,26 @@ public class CameraActivity extends AppCompatActivity {
             }
 
 
+            public void onOrientationChanged(int orientation, int width, int height) {
 
-            public void onOrientationChanged(int orientation,int width,int height){
-
-                if(orientation%180!=0) {
-
+                if (orientation % 180 != 0) {
                     fl_params.width = height;
                     fl_params.height = width;
                     fl_view.setLayoutParams(fl_params);
-                    fl_view.setRotation(((float)orientation - 180f));
-
+                    fl_view.setRotation(((float) orientation - 180f));
                     fl_hide_params.width = height;
-                    fl_hide_params.height = width ;
+                    fl_hide_params.height = width;
                     fl_view_hide.setLayoutParams(fl_hide_params);
-                    fl_view_hide.setRotation(((float)orientation - 180f));
-
-
-                }else {
-
-
+                    fl_view_hide.setRotation(((float) orientation - 180f));
+                } else {
                     fl_params.width = width;
                     fl_params.height = height;
                     fl_view.setLayoutParams(fl_params);
-                    fl_view.setRotation(((float)orientation));
-
+                    fl_view.setRotation(((float) orientation));
                     fl_hide_params.width = width;
-                    fl_hide_params.height = height ;
+                    fl_hide_params.height = height;
                     fl_view_hide.setLayoutParams(fl_hide_params);
-                    fl_view_hide.setRotation(((float)orientation));
+                    fl_view_hide.setRotation(((float) orientation));
 
                 }
 
@@ -202,8 +187,32 @@ public class CameraActivity extends AppCompatActivity {
         });
 
 
-
         PermissionUtils.requestReadWriteAppPermissions(this);
+
+        if (Pref.getIn(CameraActivity.this).getCamShowWaterMark()) {
+            if (!watermark_logo_path.equals("")) {
+                watermark_logo.setVisibility(View.VISIBLE);
+                Glide.with(CameraActivity.this)
+                        .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
+                        .into(watermark_logo);
+            } else {
+                watermark_logo.setVisibility(View.GONE);
+            }
+        } else {
+            watermark_logo.setVisibility(View.GONE);
+        }
+        if (Pref.getIn(CameraActivity.this).getCamShowTime()) {
+            txtTimeStamp.setVisibility(View.VISIBLE);
+            txtTimeStamp.setText("TimeStamp: 09-02-2023 10:54:00 AM");
+        } else {
+            txtTimeStamp.setVisibility(View.GONE);
+        }
+        if (Pref.getIn(CameraActivity.this).getCamShowAddress()) {
+            txtAddress.setVisibility(View.VISIBLE);
+            txtAddress.setText("Address: Kakinada");
+        } else {
+            txtAddress.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.fab_video)
@@ -217,7 +226,7 @@ public class CameraActivity extends AppCompatActivity {
         String currentTimeStamp = dateFormat.format(new Date());
 
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "CameraViewFreeDrawing";
-        File outputDir= new File(path);
+        File outputDir = new File(path);
         outputDir.mkdirs();
         File saveTo = new File(path + File.separator + currentTimeStamp + ".mp4");
         camera_testing.takeVideoSnapshot(saveTo);
@@ -231,7 +240,7 @@ public class CameraActivity extends AppCompatActivity {
             Toast.makeText(this, "Already taking video.", Toast.LENGTH_SHORT).show();
             return;
         }
-       camera_testing.takePictureSnapshot();
+        camera_testing.takePictureSnapshot();
         //camera_testing.takePicture();
     }
 
@@ -241,9 +250,9 @@ public class CameraActivity extends AppCompatActivity {
         if (camera_testing.isTakingPicture() || camera_testing.isTakingVideo()) return;
         fabFront.animate().rotation(animation_flip).setDuration(1000).start();
         camera_testing.toggleFacing();
-        if(animation_flip==180f){
+        if (animation_flip == 180f) {
             animation_flip = animation_flip - 180f;
-        }else{
+        } else {
             animation_flip = 180f;
         }
         /*switch (camera_testing.toggleFacing()) {
@@ -260,8 +269,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.img_flash)
-
-    void flashclick(){
+    void flashclick() {
         switch (Pref.getIn(CameraActivity.this).getCameraFlash()) {
             case "auto":
                 Pref.getIn(CameraActivity.this).saveCameraFlash("on");
@@ -281,23 +289,23 @@ public class CameraActivity extends AppCompatActivity {
 
     void camFlash() {
 
-        if(Pref.getIn(CameraActivity.this).getCameraFlash().equals("")|| Pref.getIn(CameraActivity.this).getCameraFlash().equals("off")) {
-           // layoutParams.dimensionRatio = "9:16";
+        if (Pref.getIn(CameraActivity.this).getCameraFlash().equals("") || Pref.getIn(CameraActivity.this).getCameraFlash().equals("off")) {
+            // layoutParams.dimensionRatio = "9:16";
             //camera_testing.setLayoutParams(layoutParams);
             //camera_testing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             camera_testing.setFlash(Flash.OFF);
             img_flash.setImageResource(R.drawable.ic_flash_off_24);
-        } else if(Pref.getIn(CameraActivity.this).getCameraFlash().equals("on")) {
+        } else if (Pref.getIn(CameraActivity.this).getCameraFlash().equals("on")) {
             //layoutParams.dimensionRatio = "3:4";
             //camera_testing.setLayoutParams(layoutParams);
             camera_testing.setFlash(Flash.ON);
             img_flash.setImageResource(R.drawable.ic_flash_on_24);
-        }else if(Pref.getIn(CameraActivity.this).getCameraFlash().equals("auto")) {
+        } else if (Pref.getIn(CameraActivity.this).getCameraFlash().equals("auto")) {
             //layoutParams.dimensionRatio = "1:1";
             //camera_testing.setLayoutParams(layoutParams);
             camera_testing.setFlash(Flash.AUTO);
             img_flash.setImageResource(R.drawable.ic_flash_auto_24);
-        }else{
+        } else {
             /*layoutParams.dimensionRatio = "9:16";
             camera_testing.setLayoutParams(layoutParams);
             camera_testing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));*/
@@ -307,10 +315,43 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.fabSettings)
+    void fabSettings() {
+        CameraSettingsBottomSheet bottomSheet = new CameraSettingsBottomSheet(myListener);
+        bottomSheet.show(getSupportFragmentManager(), "CameraBottomSheet");
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
     }
 
+
+    @Override
+    public void applyListener() {
+        if (Pref.getIn(CameraActivity.this).getCamShowWaterMark()) {
+            if (!watermark_logo_path.equals("")) {
+                watermark_logo.setVisibility(View.VISIBLE);
+                Glide.with(CameraActivity.this)
+                        .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
+                        .into(watermark_logo);
+            } else {
+                watermark_logo.setVisibility(View.GONE);
+            }
+        } else {
+            watermark_logo.setVisibility(View.GONE);
+        }
+        if (Pref.getIn(CameraActivity.this).getCamShowTime()) {
+            txtTimeStamp.setVisibility(View.VISIBLE);
+            txtTimeStamp.setText("TimeStamp: 09-02-2023 10:54:00 AM");
+        } else {
+            txtTimeStamp.setVisibility(View.GONE);
+        }
+        if (Pref.getIn(CameraActivity.this).getCamShowAddress()) {
+            txtAddress.setVisibility(View.VISIBLE);
+            txtAddress.setText("Address: Kakinada");
+        } else {
+            txtAddress.setVisibility(View.GONE);
+        }
+    }
 }

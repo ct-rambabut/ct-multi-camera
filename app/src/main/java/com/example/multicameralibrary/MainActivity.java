@@ -153,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
                 arlImages.get(position).setImgPath("");
                 notifyDataSetChanged();
             });
+
+
         }
 
         @Override

@@ -1,16 +1,16 @@
 {
   "CamSettings": {
-    "camShowWaterMark": "",
+    "camShowWaterMark": false,
     "camWaterMarkUrl": "",
-    "camShowAddress": "",
-    "camShowLatLong": "",
-    "camShowTime": "",
-    "camShowAt": "",
-    "camShowName": "",
+    "camShowAddress": false,
+    "camShowLatLong": false,
+    "camShowTime": false,
+    "camShowAt": false,
+    "camShowName": false,
     "camFlashMode": "",
     "camAspectRatio": "",
     "camType": "",
-    "camShowGuidBox": "",
+    "camShowGuidBox": false,
     "camOreControl": ""
   },
   "CamImages": [

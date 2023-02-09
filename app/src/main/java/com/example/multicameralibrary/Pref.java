@@ -123,4 +123,22 @@ public class Pref {
         return pref.getString("oriControl", "");
     }
 
+    public void setCamWatermarkPosition(String value) {
+        editor.putString("watermarkPosition", value);
+        editor.apply();
+    }
+
+    public String getCamWatermarkPosition() {
+        return pref.getString("watermarkPosition", "");
+    }
+
+    public void setCamDescPosition(String value) {
+        editor.putString("descPosition", value);
+        editor.apply();
+    }
+
+    public String getCamDescPosition() {
+        return pref.getString("descPosition", "");
+    }
+
 }

@@ -1,6 +1,9 @@
 package com.example.multicameralibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -66,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
             arlImages.clear();
             image_count = getIntent().getExtras().getInt("pos");
             arlImages = (ArrayList<ImageTags>) getIntent().getExtras().getSerializable("data");
-            if(arlImages!=null && arlImages.size()>0) {
+            if (arlImages != null && arlImages.size() > 0) {
                 tv_info.setText("count:" + arlImages.size() + "");
                 img_adapter = new ImageAdapter(MainActivity.this, arlImages);
                 recycler_imageTags.setAdapter(img_adapter);
             }
-        }else{
+        } else {
             img_adapter = new ImageAdapter(MainActivity.this, arlImages);
             recycler_imageTags.setAdapter(img_adapter);
             checkcamera();
@@ -120,23 +124,34 @@ public class MainActivity extends AppCompatActivity {
             return vh;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-            holder.tv_picture.setText(position + "::" + arlImages.get(position).getImgName());
+            holder.tv_picture.setText(position+1 + "::" + arlImages.get(position).getImgName());
 
-            Glide.with(context)
-                    .load(arlImages.get(position).getImgPath()) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
-                    .into(holder.iv_picture);
-            holder.iv_picture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MainActivity.this, CameraActivity.class);
-                    Bundle bundleObject = new Bundle();
-                    bundleObject.putInt("pos", position);
-                    bundleObject.putSerializable("data", (Serializable) arlImages);
-                    i.putExtras(bundleObject);
-                    startActivity(i);
-                }
+            if (!arlImages.get(position).getImgPath().equals("")) {
+                Glide.with(context).load(arlImages.get(position).getImgPath()) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
+                        .into(holder.iv_picture);
+                holder.llModify.setVisibility(View.VISIBLE);
+                holder.iv_picture.setVisibility(View.VISIBLE);
+                holder.imgCapture.setVisibility(View.GONE);
+            } else {
+                holder.imgCapture.setVisibility(View.VISIBLE);
+                holder.llModify.setVisibility(View.GONE);
+                holder.iv_picture.setVisibility(View.GONE);
+            }
+            holder.iv_picture.setOnClickListener(v -> {
+                Intent i = new Intent(MainActivity.this, CameraActivity.class);
+                Bundle bundleObject = new Bundle();
+                bundleObject.putInt("pos", position);
+                bundleObject.putSerializable("data", (Serializable) arlImages);
+                i.putExtras(bundleObject);
+                startActivity(i);
+            });
+
+            holder.imgDelete.setOnClickListener(view -> {
+                arlImages.get(position).setImgPath("");
+                notifyDataSetChanged();
             });
         }
 
@@ -146,14 +161,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tv_picture;
-            public ImageView iv_picture;
+            AppCompatTextView tv_picture;
+            public AppCompatImageView iv_picture, imgEdit, imgDelete,imgCapture;
+            LinearLayoutCompat llModify;
             //   protected Images images;
 
             public ViewHolder(View view) {
                 super(view);
                 this.tv_picture = view.findViewById(R.id.tv_picture);
                 this.iv_picture = view.findViewById(R.id.iv_picture);
+                this.llModify = view.findViewById(R.id.llModify);
+                this.imgEdit = view.findViewById(R.id.imgEdit);
+                this.imgDelete = view.findViewById(R.id.imgDelete);
+                this.imgCapture = view.findViewById(R.id.imgCapture);
             }
         }
     }

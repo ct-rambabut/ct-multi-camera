@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,28 +44,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        Button btn_camera = findViewById(R.id.btn_camera);
         TextView tv_info = findViewById(R.id.tv_info);
-        recycler_imageTags = (RecyclerView) findViewById(R.id.recycler_imageTags);
+        recycler_imageTags = findViewById(R.id.recycler_imageTags);
 
         recycler_imageTags.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         arlImages.clear();
 
-
-        btn_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-                Bundle bundleObject = new Bundle();
-                bundleObject.putInt("pos", 0);
-                bundleObject.putString("from", "images");
-                bundleObject.putString("lan", "123456");
-                bundleObject.putSerializable("data", (Serializable) arlImages);
-                intent.putExtras(bundleObject);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         if (getIntent().getExtras() != null) {
             arlImages.clear();
@@ -80,6 +65,19 @@ public class MainActivity extends AppCompatActivity {
             recycler_imageTags.setAdapter(img_adapter);
             checkcamera();
         }
+
+        try {
+            JSONObject jObj = new JSONObject(loadJSONFromAsset());
+            Pref.getIn(this).setCamShowWaterMark(jObj.getBoolean("camShowWaterMark"));
+            Pref.getIn(this).setCamShowAddress(jObj.getBoolean("camShowAddress"));
+            Pref.getIn(this).setCamShowLatLng(jObj.getBoolean("camShowLatLong"));
+            Pref.getIn(this).setCamShowTime(jObj.getBoolean("camShowTime"));
+            Pref.getIn(this).setCamShowName(jObj.getBoolean("camShowName"));
+            Pref.getIn(this).setCamShowGuideBox(jObj.getBoolean("camShowGuidBox"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -154,6 +152,17 @@ public class MainActivity extends AppCompatActivity {
                 notifyDataSetChanged();
             });
 
+            holder.imgCapture.setOnClickListener(view -> {
+                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                Bundle bundleObject = new Bundle();
+                bundleObject.putInt("pos", position);
+                bundleObject.putString("from", "images");
+                bundleObject.putString("lan", "123456");
+                bundleObject.putSerializable("data", (Serializable) arlImages);
+                intent.putExtras(bundleObject);
+                startActivity(intent);
+                finish();
+            });
 
         }
 
@@ -178,5 +187,21 @@ public class MainActivity extends AppCompatActivity {
                 this.imgCapture = view.findViewById(R.id.imgCapture);
             }
         }
+    }
+
+    public String loadJSONFromAsset() {
+        String json;
+        try {
+            InputStream is = this.getAssets().open("camera.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }

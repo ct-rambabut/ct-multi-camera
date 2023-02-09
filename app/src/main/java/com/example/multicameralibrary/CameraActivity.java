@@ -101,6 +101,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
     MyListener myListener;
     private static WeakReference<PictureResult> image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +109,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        myListener = (MyListener) this;
+        myListener = this;
 
         appLocationService = new AppLocationService(CameraActivity.this);
 
@@ -116,6 +117,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         arlImages = (ArrayList<ImageTags>) getIntent().getExtras().getSerializable("data");
         position = getIntent().getExtras().getInt("pos");
 
+        Log.e("position", "onCreate: " + arlImages.size());
 
         layoutParams = (ConstraintLayout.LayoutParams) camera_testing.getLayoutParams();
         camera_testing.setLifecycleOwner(this);
@@ -133,22 +135,22 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
             }
         }
 
-        if(watermark_logo_path!=""){
+        if (watermark_logo_path != "") {
             watermark_logo.setVisibility(View.VISIBLE);
             Glide.with(CameraActivity.this)
                     .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
                     .into(watermark_logo);
-        }else{
+        } else {
             watermark_logo.setVisibility(View.GONE);
         }
 
         /*water mark position*/
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
-        params.gravity = Gravity.RIGHT|Gravity.BOTTOM;
+        params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         watermark_logo.setLayoutParams(params);
 
         /*desc position*/
-        txtTimeStamp.setGravity(Gravity.RIGHT|Gravity.TOP);
+        txtTimeStamp.setGravity(Gravity.RIGHT | Gravity.TOP);
 
 
         /*image controls*/
@@ -190,32 +192,19 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                 if (image == null) {
                     findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
                     findViewById(R.id.CL_preview).setVisibility(View.GONE);
-                }else{
+                } else {
                     findViewById(R.id.cam_view).setVisibility(View.GONE);
                     findViewById(R.id.CL_preview).setVisibility(View.VISIBLE);
 
-                    im.toBitmap(1000, 1000, new BitmapCallback() {
-                        @Override
-                        public void onBitmapReady(Bitmap bitmap) {
-                            imagepreview.setImageBitmap(bitmap);
-                        }
-                    });
+                    im.toBitmap(1000, 1000, bitmap -> imagepreview.setImageBitmap(bitmap));
                 }
 
-                btn_retake_picture.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
-                        findViewById(R.id.CL_preview).setVisibility(View.GONE);
-                    }
-                });
+                btn_retake_picture.setOnClickListener(v -> restartCamera());
 
-                btn_next_picture.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (image == null) {
-                            return;
-                        }
+                btn_next_picture.setOnClickListener(v -> {
+                    if (image == null) {
+                        return;
+                    }else {
 
                         ContextWrapper cw = new ContextWrapper(CameraActivity.this);
                         File directory = cw.getDir("images", Context.MODE_PRIVATE);
@@ -235,18 +224,10 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                                 position++;
                                 findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
                                 findViewById(R.id.CL_preview).setVisibility(View.GONE);
-                                /*Intent intent = new Intent(CameraActivity.this, CameraActivity.class);
-                                Bundle bundleObject = new Bundle();
-                                bundleObject.putSerializable("data", arlImages);
-                                bundleObject.putInt("pos", position);
-                                bundleObject.putString("lan", "lan");
-                                bundleObject.putString("from", "from");
-                                intent.putExtras(bundleObject);
-                                startActivity(intent);
-                                finish();*/
+//                            restartCamera();
+
                             }
                         });
-
                     }
                 });
 
@@ -287,8 +268,6 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
                     }
                 });
-
-
 
             }
 
@@ -337,6 +316,11 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
 
         PermissionUtils.requestReadWriteAppPermissions(this);
+
+        if (position == arlImages.size() - 1) {
+            Log.e("position1", "onCreate: " + arlImages.size());
+            btn_next_picture.setText("Done & Close");
+        }
 
 
         if (Pref.getIn(CameraActivity.this).getCamShowWaterMark()) {
@@ -504,5 +488,17 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         } else {
             txtAddress.setVisibility(View.GONE);
         }
+    }
+
+    public void restartCamera() {
+        Intent intent = new Intent(CameraActivity.this, CameraActivity.class);
+        Bundle bundleObject = new Bundle();
+        bundleObject.putSerializable("data", arlImages);
+        bundleObject.putInt("pos", position);
+        bundleObject.putString("lan", "lan");
+        bundleObject.putString("from", "from");
+        intent.putExtras(bundleObject);
+        startActivity(intent);
+        finish();
     }
 }

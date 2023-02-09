@@ -100,6 +100,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     private AppLocationService appLocationService;
 
     MyListener myListener;
+    FrameLayout.LayoutParams fl_params,fl_hide_params;
     private static WeakReference<PictureResult> image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,6 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         ButterKnife.bind(this);
 
         myListener = (MyListener) this;
-
         appLocationService = new AppLocationService(CameraActivity.this);
 
         //getting json response
@@ -124,28 +124,18 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         camFlash();
 
         /*Camera settings*/
-        if (camaspectratio != "") {
-            if (camaspectratio.equalsIgnoreCase("full")) {
-                camera_testing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            } else {
-                layoutParams.dimensionRatio = camaspectratio;
-                camera_testing.setLayoutParams(layoutParams);
-            }
-        }
 
-        if(watermark_logo_path!=""){
+
+        /*if(watermark_logo_path!=""){
             watermark_logo.setVisibility(View.VISIBLE);
             Glide.with(CameraActivity.this)
                     .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
                     .into(watermark_logo);
         }else{
             watermark_logo.setVisibility(View.GONE);
-        }
+        }*/
 
-        /*water mark position*/
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
-        params.gravity = Gravity.RIGHT|Gravity.BOTTOM;
-        watermark_logo.setLayoutParams(params);
+
 
         /*desc position*/
         txtTimeStamp.setGravity(Gravity.RIGHT|Gravity.TOP);
@@ -168,22 +158,14 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
             txt_title.setVisibility(View.GONE);
         }
 
-        FrameLayout.LayoutParams fl_params = (FrameLayout.LayoutParams) fl_view.getLayoutParams();
-        FrameLayout.LayoutParams fl_hide_params = (FrameLayout.LayoutParams) fl_view_hide.getLayoutParams();
+         fl_params = (FrameLayout.LayoutParams) fl_view.getLayoutParams();
+        fl_hide_params = (FrameLayout.LayoutParams) fl_view_hide.getLayoutParams();
 
 
         camera_testing.addCameraListener(new CameraListener() {
             @Override
             public void onPictureTaken(@NonNull PictureResult im) {
 
-
-                /*PicturePreviewActivity.setPictureResult(result);
-                Intent intent = new Intent(CameraActivity.this, PicturePreviewActivity.class);
-                Bundle bundleObject = new Bundle();
-                bundleObject.putInt("pos", position);
-                bundleObject.putSerializable("data", (Serializable) arlImages);
-                intent.putExtras(bundleObject);
-                startActivity(intent);*/
 
                 image = im != null ? new WeakReference<>(im) : null;
 
@@ -235,15 +217,6 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                                 position++;
                                 findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
                                 findViewById(R.id.CL_preview).setVisibility(View.GONE);
-                                /*Intent intent = new Intent(CameraActivity.this, CameraActivity.class);
-                                Bundle bundleObject = new Bundle();
-                                bundleObject.putSerializable("data", arlImages);
-                                bundleObject.putInt("pos", position);
-                                bundleObject.putString("lan", "lan");
-                                bundleObject.putString("from", "from");
-                                intent.putExtras(bundleObject);
-                                startActivity(intent);
-                                finish();*/
                             }
                         });
 
@@ -338,31 +311,8 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
         PermissionUtils.requestReadWriteAppPermissions(this);
 
+        applyListener();
 
-        if (Pref.getIn(CameraActivity.this).getCamShowWaterMark()) {
-            if (!watermark_logo_path.equals("")) {
-                watermark_logo.setVisibility(View.VISIBLE);
-                Glide.with(CameraActivity.this)
-                        .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
-                        .into(watermark_logo);
-            } else {
-                watermark_logo.setVisibility(View.GONE);
-            }
-        } else {
-            watermark_logo.setVisibility(View.GONE);
-        }
-        if (Pref.getIn(CameraActivity.this).getCamShowTime()) {
-            txtTimeStamp.setVisibility(View.VISIBLE);
-            txtTimeStamp.setText("TimeStamp: 09-02-2023 10:54:00 AM");
-        } else {
-            txtTimeStamp.setVisibility(View.GONE);
-        }
-        if (Pref.getIn(CameraActivity.this).getCamShowAddress()) {
-            txtAddress.setVisibility(View.VISIBLE);
-            txtAddress.setText("Address: Kakinada");
-        } else {
-            txtAddress.setVisibility(View.GONE);
-        }
     }
 
     @OnClick(R.id.fab_video)
@@ -486,12 +436,20 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                 Glide.with(CameraActivity.this)
                         .load(watermark_logo_path) // resizes the image to these dimensions (in pixel). resize does not respect aspect ratio
                         .into(watermark_logo);
+
+                /*water mark position*/
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
+                params.gravity = Gravity.RIGHT|Gravity.BOTTOM;
+                watermark_logo.setLayoutParams(params);
+
             } else {
                 watermark_logo.setVisibility(View.GONE);
             }
         } else {
             watermark_logo.setVisibility(View.GONE);
         }
+
+
         if (Pref.getIn(CameraActivity.this).getCamShowTime()) {
             txtTimeStamp.setVisibility(View.VISIBLE);
             txtTimeStamp.setText("TimeStamp: 09-02-2023 10:54:00 AM");
@@ -504,5 +462,24 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         } else {
             txtAddress.setVisibility(View.GONE);
         }
+
+        /*camaspectratio = Pref.getIn(CameraActivity.this).getCamAspectRatio();
+        if ( camaspectratio != "") {
+            if (camaspectratio.equalsIgnoreCase("Full")) {
+                camera_testing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            } else {
+                layoutParams.dimensionRatio = camaspectratio;
+                camera_testing.setLayoutParams(layoutParams);
+            }
+
+            camera_testing.setLifecycleOwner(this);
+            //Log.e("size",)
+
+
+            fl_params.width = camera_testing.getWidth();
+            fl_params.height = camera_testing.getHeight();
+            fl_view.setLayoutParams(fl_params);
+
+        }*/
     }
 }

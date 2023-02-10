@@ -23,14 +23,12 @@
             android:id="@+id/rgAspectRatio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_margin="10dp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb11"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/radio_flat_selector"
@@ -43,7 +41,7 @@
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb34"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
@@ -57,7 +55,7 @@
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb916"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
@@ -71,7 +69,7 @@
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rbFull"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"

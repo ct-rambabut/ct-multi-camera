@@ -43,11 +43,11 @@
 
 
             <FrameLayout
-                android:rotation="90"
                 android:id="@+id/fl_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:rotation="90"
                 app:layout_drawOnPictureSnapshot="true"
                 app:layout_drawOnPreview="true"
                 app:layout_drawOnVideoSnapshot="true">
@@ -66,28 +66,28 @@
                     android:id="@+id/txtTimeStamp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Time Stamp"
                     android:gravity="bottom|right"
                     android:padding="10dp"
+                    android:text="Time Stamp"
                     android:textColor="@android:color/holo_red_dark" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/txtAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="\nAddress: CarTrade Kakinada"
-                    android:textColor="@android:color/holo_red_dark" />
+                    android:textColor="@android:color/holo_red_dark"
+                    android:visibility="gone" />
 
 
             </FrameLayout>
 
             <FrameLayout
-                android:visibility="gone"
                 android:id="@+id/fl_view_hide"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:visibility="gone"
 
                 app:layout_drawOnPictureSnapshot="false"
                 app:layout_drawOnPreview="true"
@@ -104,8 +104,8 @@
                     android:id="@+id/txt_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
                     android:gravity="center_horizontal"
+                    android:padding="10dp"
                     android:text="Title"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="18sp"
@@ -180,7 +180,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/image"
@@ -206,45 +206,51 @@
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btn_retake_picture"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_10"
+                android:layout_weight="1"
+                android:background="@color/gray"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_retake_camera_img"
+                android:drawablePadding="5dp"
                 android:text="Retake"
-                android:textColor="@color/white"
-                app:fabSize="normal" />
+                android:textColor="@color/white" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btn_next_picture"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_10"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_save_file"
+                android:drawablePadding="5dp"
                 android:text="Save &amp; Next"
-                android:textColor="@color/white"
-                app:fabSize="normal" />
+                android:textColor="@color/white" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fab_close_picture"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_10"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:background="@color/gray"
+                android:drawableLeft="@drawable/ic_save_file"
+                android:drawablePadding="5dp"
                 android:text="Save &amp; Close"
-                android:textColor="@color/white"
-                app:fabSize="normal" />
+                android:textColor="@color/white" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

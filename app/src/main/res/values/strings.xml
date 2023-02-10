@@ -26,10 +26,30 @@
     <string name="cameraview_filter_temperature">com.example.multicameralibrary.camera.filters.TemperatureFilter</string>
     <string name="cameraview_filter_tint">com.example.multicameralibrary.camera.filters.TintFilter</string>
     <string name="cameraview_filter_vignette">com.example.multicameralibrary.camera.filters.VignetteFilter</string>
+    <string name="txt_watermark">Watermark</string>
+    <string name="txt_description">Text Overlay</string>
+    <string name="txt_Label">Image Label</string>
+    <string name="txt_helper">Helper Overlay Image</string>
+    <string name="txt_address">Address</string>
+    <string name="txt_latitude_amp_longitude">Location Tags</string>
+    <string name="txt_time">Time Stamp</string>
+    <string name="txt_guide_box">Guide Box</string>
+    <string name="txt_apply">Apply</string>
+    <string name="txt_full">Full</string>
+    <string name="txt_9_16">9:16</string>
+    <string name="txt_3_4">3:4</string>
+    <string name="txt_1_1">1:1</string>
 
 
     <string-array name="watermarkPosition">
         <item>Watermark Position</item>
+        <item>Top-Left</item>
+        <item>Top-Right</item>
+        <item>Bottom-Left</item>
+        <item>Bottom-right</item>
+    </string-array>
+    <string-array name="descriptionPosition">
+        <item>Text Overlay Position</item>
         <item>Top-Left</item>
         <item>Top-Right</item>
         <item>Bottom-Left</item>

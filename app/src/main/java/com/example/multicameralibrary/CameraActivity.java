@@ -412,7 +412,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                 /*water mark position*/
 
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
-                params.gravity = Pref.getIn(CameraActivity.this).getCamWatermarkPosition();
+                params.gravity = Pref.getIn(CameraActivity.this).getCamWatermarkGravityPosition();
                 watermark_logo.setLayoutParams(params);
 
             } else {

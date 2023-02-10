@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -118,7 +119,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
         layoutParams = (ConstraintLayout.LayoutParams) camera_testing.getLayoutParams();
         camera_testing.setLifecycleOwner(this);
-        camera_testing.setUseDeviceOrientation(false);
+        camera_testing.setUseDeviceOrientation(true);
         camera_testing.setVideoMaxDuration(120 * 1000); // max 2mins
         camFlash();
 
@@ -136,6 +137,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
                 image = im != null ? new WeakReference<>(im) : null;
 
+
                 if (image == null) {
                     findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
                     findViewById(R.id.CL_preview).setVisibility(View.GONE);
@@ -146,6 +148,9 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                     im.toBitmap(2000, 2000, new BitmapCallback() {
                         @Override
                         public void onBitmapReady(Bitmap bitmap) {
+                            if (camera_testing.getOrientation() % 180 != 0) {
+                                bitmap = rotateBitmap(bitmap, ((camera_testing.getOrientation()-180f)));
+                            }
                             imagepreview.setImageBitmap(bitmap);
                         }
                     });
@@ -185,6 +190,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
                         image.get().toFile(saveTo, file -> {
                             if (file != null) {
+                                image = null;
                                 //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
                                 arlImages.get(position).setImgPath(file.getPath());
                                 position++;
@@ -215,22 +221,24 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                                 directory.mkdir();
                             }
                             File saveTo = new File(directory, filename + ".jpg");
-
-                            image.get().toFile(saveTo, file -> {
-                                if (file != null) {
-                                    //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
-                                    arlImages.get(position).setImgPath(file.getPath());
-                                    Intent intent = new Intent(CameraActivity.this, MainActivity.class);
-                                    Bundle bundleObject = new Bundle();
-                                    bundleObject.putSerializable("data", arlImages);
-                                    bundleObject.putInt("pos", position);
-                                    bundleObject.putString("lan", "lan");
-                                    bundleObject.putString("from", "from");
-                                    intent.putExtras(bundleObject);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
+                            if(image!=null) {
+                                image.get().toFile(saveTo, file -> {
+                                    if (file != null) {
+                                        image = null;
+                                        //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
+                                        arlImages.get(position).setImgPath(file.getPath());
+                                        Intent intent = new Intent(CameraActivity.this, MainActivity.class);
+                                        Bundle bundleObject = new Bundle();
+                                        bundleObject.putSerializable("data", arlImages);
+                                        bundleObject.putInt("pos", position);
+                                        bundleObject.putString("lan", "lan");
+                                        bundleObject.putString("from", "from");
+                                        intent.putExtras(bundleObject);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                            }
                         }
 
                     }
@@ -481,5 +489,11 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
             camera_testing.setFacing(Facing.BACK);
         }
 
+    }
+
+    public Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }

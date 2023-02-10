@@ -1360,6 +1360,10 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
         return mCameraEngine.getAudio();
     }
 
+    public int getOrientation(){
+        return mOrientationHelper.getLastDeviceOrientation();
+    }
+
     /**
      * Sets an {@link AutoFocusMarker} to be notified of metering start, end and fail events
      * so that it can draw elements on screen.

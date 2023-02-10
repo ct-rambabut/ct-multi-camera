@@ -86,6 +86,24 @@ public class Pref {
         return pref.getBoolean("guideBox", false);
     }
 
+    public void setCamShowImageLabel(boolean value) {
+        editor.putBoolean("imageLabel", value);
+        editor.apply();
+    }
+
+    public boolean getCamShowImageLabel() {
+        return pref.getBoolean("imageLabel", false);
+    }
+
+    public void setCamShowHelperImage(boolean value) {
+        editor.putBoolean("helperImage", value);
+        editor.apply();
+    }
+
+    public boolean getCamShowHelperImage() {
+        return pref.getBoolean("helperImage", false);
+    }
+
     public void setCamShowAt(String value) {
         editor.putString("at", value);
         editor.apply();
@@ -128,8 +146,9 @@ public class Pref {
     }
 
     public int getCamWatermarkGravityPosition() {
-        return pref.getInt("watermarkPosition", Gravity.BOTTOM|Gravity.LEFT);
+        return pref.getInt("watermarkPosition", Gravity.BOTTOM | Gravity.LEFT);
     }
+
     public void setCamWatermarkValue(String value) {
         editor.putString("watermarkValue", value);
         editor.apply();
@@ -145,8 +164,9 @@ public class Pref {
     }
 
     public Integer getCamDescPosition() {
-        return pref.getInt("descPosition", Gravity.BOTTOM|Gravity.RIGHT);
+        return pref.getInt("descPosition", Gravity.BOTTOM | Gravity.RIGHT);
     }
+
     public void setCamDescValue(String value) {
         editor.putString("descValue", value);
         editor.apply();
@@ -154,6 +174,11 @@ public class Pref {
 
     public String getCamDescValue() {
         return pref.getString("descValue", "");
+    }
+
+
+    public void clearPref() {
+        editor.clear().apply();
     }
 
 }

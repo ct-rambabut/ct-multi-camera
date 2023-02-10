@@ -8,30 +8,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch swWatermark, swAddress, swLatLng, swTime, swName, swGuideBox;
-    Spinner spWatermarkPosition, spAspectRatio, spDescPosition;
-    Button btnApply;
+    SwitchCompat swWatermark, swAddress, swLatLng, swTime, swTextOverlay, swGuideBox, swLabel, swHelper;
+    AppCompatSpinner spWatermarkPosition, spAspectRatio, spDescPosition;
+    AppCompatButton btnApply, btnReset;
     MyListener myListener;
 
     String[] watermarkPosition = new String[]{"WaterMark Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right"};
     String watermarkStatePosition = "";
     String watermark = "";
-    String[] descPosition = new String[]{"Description Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right"};
+    String[] descPosition = new String[]{"Label Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right"};
     String descStatePosition = "";
     String desc = "";
 
@@ -40,7 +38,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
     String aspectRatio = "";
 
     RadioGroup rgAspectRatio;
-    RadioButton rbFull, rb916, rb34, rb11;
+    AppCompatRadioButton rbFull, rb916, rb34, rb11;
 
     public CameraSettingsBottomSheet(MyListener listener) {
         myListener = listener;
@@ -56,7 +54,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         swAddress = v.findViewById(R.id.swAddress);
         swLatLng = v.findViewById(R.id.swLatLng);
         swTime = v.findViewById(R.id.swTime);
-        swName = v.findViewById(R.id.swName);
+        swTextOverlay = v.findViewById(R.id.swTextOverlay);
         swGuideBox = v.findViewById(R.id.swGuideBox);
         spWatermarkPosition = v.findViewById(R.id.spWatermarkPosition);
         spAspectRatio = v.findViewById(R.id.spAspectRatio);
@@ -67,6 +65,9 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         rb916 = v.findViewById(R.id.rb916);
         rb34 = v.findViewById(R.id.rb34);
         rb11 = v.findViewById(R.id.rb11);
+        swLabel = v.findViewById(R.id.swLabel);
+        swHelper = v.findViewById(R.id.swHelper);
+        btnReset = v.findViewById(R.id.btnReset);
         return v;
     }
 
@@ -78,8 +79,10 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         swAddress.setChecked(Pref.getIn(requireContext()).getCamShowAddress());
         swLatLng.setChecked(Pref.getIn(requireContext()).getCamShowLatLng());
         swTime.setChecked(Pref.getIn(requireContext()).getCamShowTime());
-        swName.setChecked(Pref.getIn(requireContext()).getCamShowName());
+        swTextOverlay.setChecked(Pref.getIn(requireContext()).getCamShowName());
         swGuideBox.setChecked(Pref.getIn(requireContext()).getCamShowGuideBox());
+        swLabel.setChecked(Pref.getIn(requireContext()).getCamShowImageLabel());
+        swHelper.setChecked(Pref.getIn(requireContext()).getCamShowHelperImage());
 
         if (Pref.getIn(requireContext()).getCamAspectRatio().equalsIgnoreCase("Full")) {
             rbFull.setChecked(true);
@@ -101,12 +104,59 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
             dismiss();
         });
 
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Pref.getIn(requireContext()).clearPref();
+                myListener.applyListener();
+                dismiss();
+            }
+        });
+
         swWatermark.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowWaterMark(b));
-        swAddress.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowAddress(b));
-        swLatLng.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowLatLng(b));
-        swTime.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowTime(b));
-        swName.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowName(b));
+        swAddress.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                Pref.getIn(requireContext()).setCamShowAddress(true);
+                swTextOverlay.setChecked(true);
+            } else {
+                Pref.getIn(requireContext()).setCamShowAddress(false);
+                swTextOverlay.setChecked(false);
+            }
+
+        });
+        swLatLng.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                Pref.getIn(requireContext()).setCamShowLatLng(true);
+                swTextOverlay.setChecked(true);
+            } else {
+                Pref.getIn(requireContext()).setCamShowLatLng(false);
+                swTextOverlay.setChecked(false);
+            }
+        });
+        swTime.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                Pref.getIn(requireContext()).setCamShowTime(true);
+                swTextOverlay.setChecked(true);
+            } else {
+                Pref.getIn(requireContext()).setCamShowTime(false);
+                swTextOverlay.setChecked(false);
+            }
+        });
+
+        /*if(!Pref.getIn(requireContext()).getCamShowName()){
+            Pref.getIn(requireContext()).setCamDescValue("Label Position");
+        }*/
+        swTextOverlay.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                Pref.getIn(requireContext()).setCamShowName(true);
+            } else {
+                Pref.getIn(requireContext()).setCamShowName(false);
+                spDescPosition.setSelection(0);
+            }
+        });
         swGuideBox.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowGuideBox(b));
+        swLabel.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowImageLabel(b));
+        swHelper.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowHelperImage(b));
 
         rgAspectRatio.setOnCheckedChangeListener((radioGroup, i) -> {
             if (i == R.id.rbFull) {

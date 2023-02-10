@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         JSONObject object = null;
         try {
-            object = new JSONObject(jsonstring);
-            JSONArray images = object.getJSONArray("imagetags");
+            object = new JSONObject(loadJSONFromAsset());
+            JSONArray images = object.getJSONArray("CamImages");
             arlImages.clear();
             for (int i = 0; i < images.length(); i++) {
                 JSONObject rec = images.getJSONObject(i);

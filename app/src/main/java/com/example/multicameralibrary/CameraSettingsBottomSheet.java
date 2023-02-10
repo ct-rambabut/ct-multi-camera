@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.SwitchCompat;
@@ -24,6 +25,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
     SwitchCompat swWatermark, swAddress, swLatLng, swTime, swTextOverlay, swGuideBox, swLabel, swHelper;
     AppCompatSpinner spWatermarkPosition, spAspectRatio, spDescPosition;
     AppCompatButton btnApply, btnReset;
+    AppCompatImageView imgCloseDialog;
     MyListener myListener;
 
     String[] watermarkPosition = new String[]{"WaterMark Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right"};
@@ -68,6 +70,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         swLabel = v.findViewById(R.id.swLabel);
         swHelper = v.findViewById(R.id.swHelper);
         btnReset = v.findViewById(R.id.btnReset);
+        imgCloseDialog = v.findViewById(R.id.imgCloseDialog);
         return v;
     }
 
@@ -99,18 +102,17 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
             rb11.setChecked(false);
         }
 
+        imgCloseDialog.setOnClickListener(view12 -> dismiss());
+
         btnApply.setOnClickListener(view1 -> {
             myListener.applyListener();
             dismiss();
         });
 
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Pref.getIn(requireContext()).clearPref();
-                myListener.applyListener();
-                dismiss();
-            }
+        btnReset.setOnClickListener(view13 -> {
+            Pref.getIn(requireContext()).clearPref();
+            myListener.applyListener();
+            dismiss();
         });
 
         swWatermark.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowWaterMark(b));
@@ -283,4 +285,10 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CloseBottomSheetDialogTheme);
+        setCancelable(false);
+    }
 }

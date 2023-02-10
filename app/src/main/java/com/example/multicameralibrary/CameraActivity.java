@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bumptech.glide.Glide;
 import com.example.multicameralibrary.camera.BitmapCallback;
 import com.example.multicameralibrary.camera.controls.Flash;
+import com.example.multicameralibrary.camera.overlay.OverlayLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.multicameralibrary.camera.CameraListener;
 import com.example.multicameralibrary.camera.CameraView;
@@ -138,7 +140,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
 
         /*desc position*/
-        txtTimeStamp.setGravity(Gravity.RIGHT|Gravity.TOP);
+
 
 
         /*image controls*/
@@ -158,7 +160,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
             txt_title.setVisibility(View.GONE);
         }
 
-         fl_params = (FrameLayout.LayoutParams) fl_view.getLayoutParams();
+        fl_params = (FrameLayout.LayoutParams) fl_view.getLayoutParams();
         fl_hide_params = (FrameLayout.LayoutParams) fl_view_hide.getLayoutParams();
 
 
@@ -176,7 +178,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                     findViewById(R.id.cam_view).setVisibility(View.GONE);
                     findViewById(R.id.CL_preview).setVisibility(View.VISIBLE);
 
-                    im.toBitmap(1000, 1000, new BitmapCallback() {
+                    im.toBitmap(2000, 2000, new BitmapCallback() {
                         @Override
                         public void onBitmapReady(Bitmap bitmap) {
                             imagepreview.setImageBitmap(bitmap);
@@ -244,7 +246,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
                         image.get().toFile(saveTo, file -> {
                             if (file != null) {
-                                Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
+                                //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
                                 arlImages.get(position).setImgPath(file.getPath());
                                 Intent intent = new Intent(CameraActivity.this, MainActivity.class);
                                 Bundle bundleObject = new Bundle();
@@ -424,6 +426,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
 
@@ -438,8 +441,9 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                         .into(watermark_logo);
 
                 /*water mark position*/
+
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
-                params.gravity = Gravity.RIGHT|Gravity.BOTTOM;
+                params.gravity = Pref.getIn(CameraActivity.this).getCamWatermarkPosition();
                 watermark_logo.setLayoutParams(params);
 
             } else {
@@ -453,9 +457,11 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
         if (Pref.getIn(CameraActivity.this).getCamShowTime()) {
             txtTimeStamp.setVisibility(View.VISIBLE);
             txtTimeStamp.setText("TimeStamp: 09-02-2023 10:54:00 AM");
+            txtTimeStamp.setGravity(Pref.getIn(CameraActivity.this).getCamDescPosition());
         } else {
             txtTimeStamp.setVisibility(View.GONE);
         }
+
         if (Pref.getIn(CameraActivity.this).getCamShowAddress()) {
             txtAddress.setVisibility(View.VISIBLE);
             txtAddress.setText("Address: Kakinada");
@@ -463,7 +469,8 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
             txtAddress.setVisibility(View.GONE);
         }
 
-        /*camaspectratio = Pref.getIn(CameraActivity.this).getCamAspectRatio();
+        camaspectratio = Pref.getIn(CameraActivity.this).getCamAspectRatio();
+
         if ( camaspectratio != "") {
             if (camaspectratio.equalsIgnoreCase("Full")) {
                 camera_testing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -472,14 +479,24 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                 camera_testing.setLayoutParams(layoutParams);
             }
 
-            camera_testing.setLifecycleOwner(this);
-            //Log.e("size",)
 
 
-            fl_params.width = camera_testing.getWidth();
-            fl_params.height = camera_testing.getHeight();
-            fl_view.setLayoutParams(fl_params);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fl_params.width = camera_testing.getWidth();
+                    fl_params.height = camera_testing.getHeight();
+                    fl_view.setLayoutParams(fl_params);
 
-        }*/
+                    fl_hide_params.width = camera_testing.getWidth();
+                    fl_hide_params.height = camera_testing.getHeight();
+                    fl_view_hide.setLayoutParams(fl_hide_params);
+
+
+                }
+            }, 100);
+
+        }
+
     }
 }

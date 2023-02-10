@@ -2,6 +2,7 @@ package com.example.multicameralibrary;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,10 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
     Button btnApply;
     MyListener myListener;
 
-    String[] watermarkPosition = new String[]{"WaterMark Position","Top-Center", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right", "Bottom-center", "Center"};
-    String[] descPosition = new String[]{"Description Position","1", "2", "3", "4", "5", "6", "7"};
+    String[] watermarkPosition = new String[]{"WaterMark Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right"};
+    String[] descPosition = new String[]{"Description Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right"};
+
+    String[] aspectratio = new String[]{"Aspect Ratio","Full", "9:16", "3:4", "1:1"};
 
     public CameraSettingsBottomSheet(MyListener listener) {
         myListener = listener;
@@ -77,21 +80,36 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
 
         ArrayAdapter adapter = new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, watermarkPosition);
         ArrayAdapter adapter1 = new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, descPosition);
+        ArrayAdapter adapter2 = new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, aspectratio);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spWatermarkPosition.setAdapter(adapter);
         spDescPosition.setAdapter(adapter1);
+        spAspectRatio.setAdapter(adapter2);
 
         spWatermarkPosition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if(position == 0){
+                /*if(position == 0){
                     Toast.makeText(requireContext(), "Please select watermark position", Toast.LENGTH_SHORT).show();
                 } else {
                     Pref.getIn(requireContext()).setCamWatermarkPosition(watermarkPosition[position]);
                     Toast.makeText(requireContext(), watermarkPosition[position], Toast.LENGTH_LONG).show();
-                }
+                }*/
+
+                if(watermarkPosition[position].equalsIgnoreCase("Top-Left"))
+                    Pref.getIn(requireContext()).setCamWatermarkPosition(Gravity.TOP|Gravity.LEFT);
+                else if(watermarkPosition[position].equalsIgnoreCase("Top-Right"))
+                    Pref.getIn(requireContext()).setCamWatermarkPosition(Gravity.TOP|Gravity.RIGHT);
+                else if(watermarkPosition[position].equalsIgnoreCase("Bottom-Left"))
+                    Pref.getIn(requireContext()).setCamWatermarkPosition(Gravity.BOTTOM|Gravity.LEFT);
+                else if(watermarkPosition[position].equalsIgnoreCase("Bottom-right"))
+                    Pref.getIn(requireContext()).setCamWatermarkPosition(Gravity.BOTTOM|Gravity.RIGHT);
+                else
+                    Pref.getIn(requireContext()).setCamWatermarkPosition(0);
+
             }
 
             @Override
@@ -102,12 +120,38 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         spDescPosition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if(position == 0){
+                /*if(position == 0){
                     Toast.makeText(requireContext(), "Please select description position", Toast.LENGTH_SHORT).show();
                 } else {
                     Pref.getIn(requireContext()).setCamDescPosition(descPosition[position]);
                     Toast.makeText(requireContext(), descPosition[position], Toast.LENGTH_LONG).show();
-                }
+                }*/
+                //Pref.getIn(requireContext()).setCamDescPosition(descPosition[position]);
+
+                if(descPosition[position].equalsIgnoreCase("Top-Left"))
+                    Pref.getIn(requireContext()).setCamDescPosition(Gravity.TOP|Gravity.LEFT);
+                else if(descPosition[position].equalsIgnoreCase("Top-Right"))
+                    Pref.getIn(requireContext()).setCamDescPosition(Gravity.TOP|Gravity.RIGHT);
+                else if(descPosition[position].equalsIgnoreCase("Bottom-Left"))
+                    Pref.getIn(requireContext()).setCamDescPosition(Gravity.BOTTOM|Gravity.LEFT);
+                else if(descPosition[position].equalsIgnoreCase("Bottom-right"))
+                    Pref.getIn(requireContext()).setCamDescPosition(Gravity.BOTTOM|Gravity.RIGHT);
+                else
+                    Pref.getIn(requireContext()).setCamDescPosition(0);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spAspectRatio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
+                    Pref.getIn(requireContext()).setCamAspectRatio(aspectratio[position]);
+                    //Toast.makeText(requireContext(), descPosition[position], Toast.LENGTH_LONG).show();
             }
 
             @Override

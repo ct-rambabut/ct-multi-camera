@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class Pref {
     }
 
     public boolean getCamShowWaterMark() {
-        return pref.getBoolean("waterMark", false);
+        return pref.getBoolean("waterMark", true);
     }
 
     public void setCamShowAddress(boolean value) {
@@ -66,7 +67,7 @@ public class Pref {
     }
 
     public boolean getCamShowTime() {
-        return pref.getBoolean("time", false);
+        return pref.getBoolean("time", true);
     }
 
     public void setCamShowName(boolean value) {
@@ -102,7 +103,7 @@ public class Pref {
     }
 
     public String getCamAspectRatio() {
-        return pref.getString("aspectRatio", "");
+        return pref.getString("aspectRatio", "Full");
     }
 
     public void setCamType(String value) {
@@ -123,22 +124,22 @@ public class Pref {
         return pref.getString("oriControl", "");
     }
 
-    public void setCamWatermarkPosition(String value) {
-        editor.putString("watermarkPosition", value);
+    public void setCamWatermarkPosition(Integer value) {
+        editor.putInt("watermarkPosition", value);
         editor.apply();
     }
 
-    public String getCamWatermarkPosition() {
-        return pref.getString("watermarkPosition", "");
+    public int getCamWatermarkPosition() {
+        return pref.getInt("watermarkPosition", Gravity.BOTTOM|Gravity.LEFT);
     }
 
-    public void setCamDescPosition(String value) {
-        editor.putString("descPosition", value);
+    public void setCamDescPosition(Integer value) {
+        editor.putInt("descPosition", value);
         editor.apply();
     }
 
-    public String getCamDescPosition() {
-        return pref.getString("descPosition", "");
+    public Integer getCamDescPosition() {
+        return pref.getInt("descPosition", Gravity.BOTTOM|Gravity.RIGHT);
     }
 
 }

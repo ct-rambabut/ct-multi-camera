@@ -58,32 +58,24 @@
                     android:layout_height="100dp"
                     android:layout_gravity="bottom"
                     android:layout_margin="10dp"
-                    android:src="@mipmap/adroit_watermark"
-                    android:visibility="gone" />
+                    android:src="@mipmap/adroit_watermark" />
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/txtTimeStamp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Time Stamp"
+                    android:padding="10dp"
+                    android:textColor="@android:color/holo_red_dark" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/txtAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:gravity="right|bottom"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtTimeStamp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Time Stamp"
-                        android:textColor="@android:color/holo_red_dark"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/txtAddress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Address: CarTrade Kakinada"
-                        android:textColor="@android:color/holo_red_dark"
-                        android:visibility="gone" />
-                </LinearLayout>
+                    android:text="\nAddress: CarTrade Kakinada"
+                    android:textColor="@android:color/holo_red_dark" />
 
 
             </FrameLayout>

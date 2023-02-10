@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -26,7 +25,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bumptech.glide.Glide;
 import com.example.multicameralibrary.camera.BitmapCallback;
 import com.example.multicameralibrary.camera.controls.Flash;
-import com.example.multicameralibrary.camera.overlay.OverlayLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.multicameralibrary.camera.CameraListener;
 import com.example.multicameralibrary.camera.CameraView;
@@ -34,14 +32,11 @@ import com.example.multicameralibrary.camera.PictureResult;
 import com.example.multicameralibrary.camera.VideoResult;
 
 import java.io.File;
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -443,7 +438,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                 /*water mark position*/
 
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
-                params.gravity = Pref.getIn(CameraActivity.this).getCamWatermarkPosition();
+                params.gravity = Pref.getIn(CameraActivity.this).getCamWatermarkGravityPosition();
                 watermark_logo.setLayoutParams(params);
 
             } else {

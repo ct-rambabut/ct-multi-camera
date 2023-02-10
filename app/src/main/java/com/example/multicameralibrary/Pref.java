@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 
-import java.util.ArrayList;
-
 
 public class Pref {
     private static Pref uniqInstance;
@@ -124,13 +122,21 @@ public class Pref {
         return pref.getString("oriControl", "");
     }
 
-    public void setCamWatermarkPosition(Integer value) {
+    public void setCamWatermarkGravityPosition(Integer value) {
         editor.putInt("watermarkPosition", value);
         editor.apply();
     }
 
-    public int getCamWatermarkPosition() {
+    public int getCamWatermarkGravityPosition() {
         return pref.getInt("watermarkPosition", Gravity.BOTTOM|Gravity.LEFT);
+    }
+    public void setCamWatermarkValue(String value) {
+        editor.putString("watermarkValue", value);
+        editor.apply();
+    }
+
+    public String getCamWatermarkValue() {
+        return pref.getString("watermarkValue", "");
     }
 
     public void setCamDescPosition(Integer value) {
@@ -140,6 +146,14 @@ public class Pref {
 
     public Integer getCamDescPosition() {
         return pref.getInt("descPosition", Gravity.BOTTOM|Gravity.RIGHT);
+    }
+    public void setCamDescValue(String value) {
+        editor.putString("descValue", value);
+        editor.apply();
+    }
+
+    public String getCamDescValue() {
+        return pref.getString("descValue", "");
     }
 
 }

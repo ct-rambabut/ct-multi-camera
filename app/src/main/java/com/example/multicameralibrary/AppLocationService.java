@@ -31,9 +31,9 @@ public class AppLocationService extends Service implements LocationListener {
     boolean isNetworkEnabled = false;
     // flag for GPS status
     boolean isLocationAvailable = false;
-    Location location; // location
-    double latitude=0.0; // latitude
-    double longitude=0.0; // longitude
+    Location location=null; // location
+    static double latitude=0.0; // latitude
+    static double longitude=0.0; // longitude
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     // The minimum time between updates in milliseconds

@@ -9,6 +9,7 @@ import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,15 @@ import com.example.multicameralibrary.camera.controls.Flash;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,8 +78,6 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
     @BindView(R.id.txtTimeStamp)
     TextView txtTimeStamp;
-    @BindView(R.id.txtAddress)
-    TextView txtAddress;
     @BindView(R.id.fabSettings)
     ImageView fabSettings;
     @BindView(R.id.image)
@@ -101,7 +104,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     MyListener myListener;
     FrameLayout.LayoutParams fl_params, fl_hide_params;
     private static WeakReference<PictureResult> image;
-
+    DecimalFormat twoDecimalForm = new DecimalFormat("#.######");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -295,6 +298,51 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
         applyListener();
 
+        Timer t1 = new Timer("frame", true);
+        t1.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                txtTimeStamp.post(new Runnable() {
+
+                    public void run() {
+                        if(txtTimeStamp!=null) {
+
+
+                            String desc = "";
+
+                            if(Pref.getIn(CameraActivity.this).getCamShowTime()){
+                                //desc = desc + DateFormat.format("dd-MM-yyyy HH:mm:ss", new Date()).toString();
+                                if(Pref.getIn(CameraActivity.this).getCamShowLatLng()){
+                                    desc = desc + "\n"+DateFormat.format("dd-MM-yyyy HH:mm:ss", new Date()).toString();
+                                }
+
+                                if(Pref.getIn(CameraActivity.this).getCamShowLatLng()){
+                                    if(appLocationService.getLocation()!=null)
+                                    desc = desc + "\nLat: " + twoDecimalForm.format(appLocationService.getLatitude())+", Lng:"+twoDecimalForm.format(appLocationService.getLongitude());
+                                }
+
+                                if(Pref.getIn(CameraActivity.this).getCamShowAddress()){
+                                    try {
+                                        if(appLocationService.getLocation()!=null)
+                                        desc = desc + "\nAddress: " + appLocationService.getAddress();
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                            }
+
+
+                            txtTimeStamp.setText(desc);
+                            //ti.setText("Lat2: " + twoDecimalForm.format(AppLocationService.lat) + " Long: " + twoDecimalForm.format(AppLocationService.lng)+ "\nAddress: " + AdroitApplication.address);
+
+                            //latitude.setText("Lat: " + twoDecimalForm.format(AdroitApplication.lat) + " Long: " + twoDecimalForm.format(AdroitApplication.lng));
+                        }
+
+                    }
+                });
+            }
+        }, 1000, 1000);
+
     }
 
     @OnClick(R.id.fab_video)
@@ -425,18 +473,11 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
         if (Pref.getIn(CameraActivity.this).getCamShowTime()) {
             txtTimeStamp.setVisibility(View.VISIBLE);
-            txtTimeStamp.setText("TimeStamp: 09-02-2023 10:54:00 AM");
             txtTimeStamp.setGravity(Pref.getIn(CameraActivity.this).getCamDescPosition());
         } else {
             txtTimeStamp.setVisibility(View.GONE);
         }
 
-        if (Pref.getIn(CameraActivity.this).getCamShowAddress()) {
-            txtAddress.setVisibility(View.VISIBLE);
-            txtAddress.setText("Address: Kakinada");
-        } else {
-            txtAddress.setVisibility(View.GONE);
-        }
 
         camaspectratio = Pref.getIn(CameraActivity.this).getCamAspectRatio();
 

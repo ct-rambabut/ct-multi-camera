@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/tv_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:gravity="center"
         android:text="Images info"
         android:textSize="16sp"

@@ -33,48 +33,57 @@ public class Pref {
     }
 
     public void setCamShowWaterMark(boolean value) {
-        editor.putBoolean("waterMark", value);
+        editor.putBoolean("camShowWaterMark", value);
         editor.apply();
     }
 
     public boolean getCamShowWaterMark() {
-        return pref.getBoolean("waterMark", true);
+        return pref.getBoolean("camShowWaterMark", true);
     }
 
     public void setCamShowAddress(boolean value) {
-        editor.putBoolean("address", value);
+        editor.putBoolean("camShowAddress", value);
         editor.apply();
     }
 
     public boolean getCamShowAddress() {
-        return pref.getBoolean("address", false);
+        return pref.getBoolean("camShowAddress", false);
     }
 
     public void setCamShowLatLng(boolean value) {
-        editor.putBoolean("latLng", value);
+        editor.putBoolean("camShowLatLong", value);
         editor.apply();
     }
 
     public boolean getCamShowLatLng() {
-        return pref.getBoolean("latLng", false);
+        return pref.getBoolean("camShowLatLong", false);
     }
 
     public void setCamShowTime(boolean value) {
-        editor.putBoolean("time", value);
+        editor.putBoolean("camShowTime", value);
         editor.apply();
     }
 
     public boolean getCamShowTime() {
-        return pref.getBoolean("time", true);
+        return pref.getBoolean("camShowTime", true);
     }
 
-    public void setCamShowName(boolean value) {
-        editor.putBoolean("name", value);
+    public void setCamShowLabelName(boolean value) {
+        editor.putBoolean("camShowLabelName", value);
         editor.apply();
     }
 
-    public boolean getCamShowName() {
-        return pref.getBoolean("name", false);
+    public boolean getCamShowLabelName() {
+        return pref.getBoolean("camShowLabelName", false);
+    }
+
+    public void setCamShowOverlayImg(boolean value) {
+        editor.putBoolean("camShowOverlayImg", value);
+        editor.apply();
+    }
+
+    public boolean getCamShowOverlayImg() {
+        return pref.getBoolean("camShowOverlayImg", false);
     }
 
     public void setCamShowGuideBox(boolean value) {
@@ -114,12 +123,12 @@ public class Pref {
     }
 
     public void setCamAspectRatio(String value) {
-        editor.putString("aspectRatio", value);
+        editor.putString("camAspectRatio", value);
         editor.apply();
     }
 
     public String getCamAspectRatio() {
-        return pref.getString("aspectRatio", "Full");
+        return pref.getString("camAspectRatio", "Full");
     }
 
     public void setCamType(String value) {
@@ -140,13 +149,13 @@ public class Pref {
         return pref.getString("oriControl", "");
     }
 
-    public void setCamWatermarkGravityPosition(Integer value) {
-        editor.putInt("watermarkPosition", value);
+    public void setCamShowWaterMarkAt(Integer value) {
+        editor.putInt("camShowWaterMarkAt", value);
         editor.apply();
     }
 
-    public int getCamWatermarkGravityPosition() {
-        return pref.getInt("watermarkPosition", Gravity.BOTTOM | Gravity.LEFT);
+    public int getCamShowWaterMarkAt() {
+        return pref.getInt("camShowWaterMarkAt", Gravity.BOTTOM | Gravity.LEFT);
     }
 
     public void setCamWatermarkValue(String value) {
@@ -174,6 +183,15 @@ public class Pref {
 
     public String getCamDescValue() {
         return pref.getString("descValue", "");
+    }
+
+  public void setCamShowTextAt(String value) {
+        editor.putString("camShowTextAt", value);
+        editor.apply();
+    }
+
+    public String getCamShowTextAt() {
+        return pref.getString("camShowTextAt", "");
     }
 
 

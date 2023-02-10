@@ -23,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
 
     SwitchCompat swWatermark, swAddress, swLatLng, swTime, swTextOverlay, swGuideBox, swLabel, swHelper;
-    AppCompatSpinner spWatermarkPosition, spAspectRatio, spDescPosition;
+    AppCompatSpinner spWatermarkPosition, spAspectRatio, spTextAt;
     AppCompatButton btnApply, btnReset;
     AppCompatImageView imgCloseDialog;
     MyListener myListener;
@@ -60,7 +60,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         swGuideBox = v.findViewById(R.id.swGuideBox);
         spWatermarkPosition = v.findViewById(R.id.spWatermarkPosition);
         spAspectRatio = v.findViewById(R.id.spAspectRatio);
-        spDescPosition = v.findViewById(R.id.spDescPosition);
+        spTextAt = v.findViewById(R.id.spDescPosition);
         btnApply = v.findViewById(R.id.btnApply);
         rgAspectRatio = v.findViewById(R.id.rgAspectRatio);
         rbFull = v.findViewById(R.id.rbFull);
@@ -82,10 +82,10 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         swAddress.setChecked(Pref.getIn(requireContext()).getCamShowAddress());
         swLatLng.setChecked(Pref.getIn(requireContext()).getCamShowLatLng());
         swTime.setChecked(Pref.getIn(requireContext()).getCamShowTime());
-        swTextOverlay.setChecked(Pref.getIn(requireContext()).getCamShowName());
+        swTextOverlay.setChecked(Pref.getIn(requireContext()).getCamShowOverlayImg());
         swGuideBox.setChecked(Pref.getIn(requireContext()).getCamShowGuideBox());
         swLabel.setChecked(Pref.getIn(requireContext()).getCamShowImageLabel());
-        swHelper.setChecked(Pref.getIn(requireContext()).getCamShowHelperImage());
+        swHelper.setChecked(Pref.getIn(requireContext()).getCamShowOverlayImg());
 
         if (Pref.getIn(requireContext()).getCamAspectRatio().equalsIgnoreCase("Full")) {
             rbFull.setChecked(true);
@@ -148,17 +148,17 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         /*if(!Pref.getIn(requireContext()).getCamShowName()){
             Pref.getIn(requireContext()).setCamDescValue("Label Position");
         }*/
-        swTextOverlay.setOnCheckedChangeListener((compoundButton, b) -> {
+        /*swTextOverlay.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
-                Pref.getIn(requireContext()).setCamShowName(true);
+                Pref.getIn(requireContext()).setCamShowOverlayImg(true);
             } else {
-                Pref.getIn(requireContext()).setCamShowName(false);
+                Pref.getIn(requireContext()).setCamShowOverlayImg(false);
                 spDescPosition.setSelection(0);
             }
-        });
+        });*/
         swGuideBox.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowGuideBox(b));
         swLabel.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowImageLabel(b));
-        swHelper.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowHelperImage(b));
+        swHelper.setOnCheckedChangeListener((compoundButton, b) -> Pref.getIn(requireContext()).setCamShowOverlayImg(b));
 
         rgAspectRatio.setOnCheckedChangeListener((radioGroup, i) -> {
             if (i == R.id.rbFull) {
@@ -183,7 +183,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spWatermarkPosition.setAdapter(adapter);
-        spDescPosition.setAdapter(adapter1);
+        spTextAt.setAdapter(adapter1);
         spAspectRatio.setAdapter(adapter2);
 
         for (int i = 1; i < watermarkPosition.length; i++) {
@@ -197,7 +197,7 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
             desc = Pref.getIn(requireContext()).getCamDescValue();
             if (descPosition[j].equals(desc)) {
                 descStatePosition = descPosition[j];
-                spDescPosition.setSelection(j);
+                spTextAt.setSelection(j);
             }
         }
         for (int k = 1; k < aspectRatioPosition.length; k++) {
@@ -214,19 +214,19 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
 
                 if (position > 0) {
                     if (watermarkPosition[position].equalsIgnoreCase("Top-Left")) {
-                        Pref.getIn(requireContext()).setCamWatermarkGravityPosition(Gravity.TOP | Gravity.LEFT);
+                        Pref.getIn(requireContext()).setCamShowWaterMarkAt(Gravity.TOP | Gravity.LEFT);
                         Pref.getIn(requireContext()).setCamWatermarkValue("Top-Left");
                     } else if (watermarkPosition[position].equalsIgnoreCase("Top-Right")) {
-                        Pref.getIn(requireContext()).setCamWatermarkGravityPosition(Gravity.TOP | Gravity.RIGHT);
+                        Pref.getIn(requireContext()).setCamShowWaterMarkAt(Gravity.TOP | Gravity.RIGHT);
                         Pref.getIn(requireContext()).setCamWatermarkValue("Top-Right");
                     } else if (watermarkPosition[position].equalsIgnoreCase("Bottom-Left")) {
-                        Pref.getIn(requireContext()).setCamWatermarkGravityPosition(Gravity.BOTTOM | Gravity.LEFT);
+                        Pref.getIn(requireContext()).setCamShowWaterMarkAt(Gravity.BOTTOM | Gravity.LEFT);
                         Pref.getIn(requireContext()).setCamWatermarkValue("Bottom-Left");
                     } else if (watermarkPosition[position].equalsIgnoreCase("Bottom-right")) {
-                        Pref.getIn(requireContext()).setCamWatermarkGravityPosition(Gravity.BOTTOM | Gravity.RIGHT);
+                        Pref.getIn(requireContext()).setCamShowWaterMarkAt(Gravity.BOTTOM | Gravity.RIGHT);
                         Pref.getIn(requireContext()).setCamWatermarkValue("Bottom-right");
                     } else {
-                        Pref.getIn(requireContext()).setCamWatermarkGravityPosition(0);
+                        Pref.getIn(requireContext()).setCamShowWaterMarkAt(0);
                         Pref.getIn(requireContext()).setCamWatermarkValue("Top-Left");
                     }
                 }
@@ -237,26 +237,26 @@ public class CameraSettingsBottomSheet extends BottomSheetDialogFragment {
 
             }
         });
-        spDescPosition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spTextAt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
                 if (position > 0) {
                     if (descPosition[position].equalsIgnoreCase("Top-Left")) {
                         Pref.getIn(requireContext()).setCamDescPosition(Gravity.TOP | Gravity.LEFT);
-                        Pref.getIn(requireContext()).setCamDescValue("Top-Left");
+                        Pref.getIn(requireContext()).setCamShowTextAt("Top-Left");
                     } else if (descPosition[position].equalsIgnoreCase("Top-Right")) {
                         Pref.getIn(requireContext()).setCamDescPosition(Gravity.TOP | Gravity.RIGHT);
-                        Pref.getIn(requireContext()).setCamDescValue("Top-Right");
+                        Pref.getIn(requireContext()).setCamShowTextAt("Top-Right");
                     } else if (descPosition[position].equalsIgnoreCase("Bottom-Left")) {
                         Pref.getIn(requireContext()).setCamDescPosition(Gravity.BOTTOM | Gravity.LEFT);
-                        Pref.getIn(requireContext()).setCamDescValue("Bottom-Left");
+                        Pref.getIn(requireContext()).setCamShowTextAt("Bottom-Left");
                     } else if (descPosition[position].equalsIgnoreCase("Bottom-right")) {
                         Pref.getIn(requireContext()).setCamDescPosition(Gravity.BOTTOM | Gravity.RIGHT);
-                        Pref.getIn(requireContext()).setCamDescValue("Bottom-right");
+                        Pref.getIn(requireContext()).setCamShowTextAt("Bottom-right");
                     } else {
                         Pref.getIn(requireContext()).setCamDescPosition(0);
-                        Pref.getIn(requireContext()).setCamDescValue("Top-Left");
+                        Pref.getIn(requireContext()).setCamShowTextAt("Top-Left");
                     }
                 }
             }

@@ -197,45 +197,51 @@
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btn_retake_picture"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_10"
+                android:layout_weight="1"
+                android:background="@color/gray"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_retake_camera_img"
+                android:drawablePadding="5dp"
                 android:text="Retake"
-                android:textColor="@color/white"
-                app:fabSize="normal" />
+                android:textColor="@color/white" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btn_next_picture"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_10"
+                android:layout_weight="1"
+                android:background="@color/red"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_save_file"
+                android:drawablePadding="5dp"
                 android:text="Save &amp; Next"
-                android:textColor="@color/white"
-                app:fabSize="normal" />
+                android:textColor="@color/white" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fab_close_picture"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_10"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:background="@color/gray"
+                android:drawableLeft="@drawable/ic_save_file"
+                android:drawablePadding="5dp"
                 android:text="Save &amp; Close"
-                android:textColor="@color/white"
-                app:fabSize="normal" />
+                android:textColor="@color/white" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

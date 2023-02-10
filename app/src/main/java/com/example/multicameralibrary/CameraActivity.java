@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
@@ -84,13 +84,13 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
     ImageView imagepreview;
 
     @BindView(R.id.fab_close_picture)
-    Button fab_close_picture;
+    AppCompatTextView fab_close_picture;
 
     @BindView(R.id.btn_retake_picture)
-    Button btn_retake_picture;
+    AppCompatTextView btn_retake_picture;
 
     @BindView(R.id.btn_next_picture)
-    Button btn_next_picture;
+    AppCompatTextView btn_next_picture;
 
     int position = 0;
     private ArrayList<ImageTags> arlImages;
@@ -460,7 +460,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                 /*water mark position*/
 
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) watermark_logo.getLayoutParams();
-                params.gravity = Pref.getIn(CameraActivity.this).getCamWatermarkGravityPosition();
+                params.gravity = Pref.getIn(CameraActivity.this).getCamShowWaterMarkAt();
                 watermark_logo.setLayoutParams(params);
 
             } else {

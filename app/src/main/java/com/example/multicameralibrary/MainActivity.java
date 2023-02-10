@@ -14,9 +14,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -67,12 +64,16 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             JSONObject jObj = new JSONObject(loadJSONFromAsset());
+            Pref.getIn(this).setCamAspectRatio(jObj.getString("camAspectRatio"));
+            Pref.getIn(this).setCamShowLabelName(jObj.getBoolean("camShowLabelName"));
+            Pref.getIn(this).setCamShowOverlayImg(jObj.getBoolean("camShowOverlayImg"));
             Pref.getIn(this).setCamShowWaterMark(jObj.getBoolean("camShowWaterMark"));
+            Pref.getIn(this).setCamShowWaterMarkAt(jObj.getInt("camShowWaterMarkAt"));
             Pref.getIn(this).setCamShowAddress(jObj.getBoolean("camShowAddress"));
             Pref.getIn(this).setCamShowLatLng(jObj.getBoolean("camShowLatLong"));
             Pref.getIn(this).setCamShowTime(jObj.getBoolean("camShowTime"));
-            Pref.getIn(this).setCamShowName(jObj.getBoolean("camShowName"));
-            Pref.getIn(this).setCamShowGuideBox(jObj.getBoolean("camShowGuidBox"));
+            Pref.getIn(this).setCamShowTextAt(jObj.getString("camShowTextAt"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

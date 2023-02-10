@@ -7,6 +7,16 @@ public class ImageTags implements Serializable {
     private String imgSno = "";
     private String imgName = "";
     private String imgMand = "";
+
+    public String getImgFrontCam() {
+        return imgFrontCam;
+    }
+
+    public void setImgFrontCam(String imgFrontCam) {
+        this.imgFrontCam = imgFrontCam;
+    }
+
+    private String imgFrontCam = "";
     private String imgLogo = "";
     private String imgOrientation = "";
     private String imgLat = "";

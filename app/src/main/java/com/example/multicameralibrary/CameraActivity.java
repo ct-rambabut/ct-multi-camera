@@ -189,19 +189,24 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                         if (!directory.exists()) {
                             directory.mkdir();
                         }
-                        File saveTo = new File(directory, filename + ".jpg");
 
-                        image.get().toFile(saveTo, file -> {
-                            if (file != null) {
-                                image = null;
-                                //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
-                                arlImages.get(position).setImgPath(file.getPath());
-                                position++;
-                                findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
-                                findViewById(R.id.CL_preview).setVisibility(View.GONE);
-                                applyListener();
-                            }
-                        });
+                        try {
+                            File saveTo = new File(directory, filename + ".jpg");
+
+                            image.get().toFile(saveTo, file -> {
+                                if (file != null) {
+                                    image = null;
+                                    //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
+                                    arlImages.get(position).setImgPath(file.getPath());
+                                    position++;
+                                    findViewById(R.id.cam_view).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.CL_preview).setVisibility(View.GONE);
+                                    applyListener();
+                                }
+                            });
+                        }catch (Exception e){
+                            Log.e("Exception",e.getMessage());
+                        }
 
                     }
                 });
@@ -223,30 +228,33 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
                             if (!directory.exists()) {
                                 directory.mkdir();
                             }
-                            File saveTo = new File(directory, filename + ".jpg");
-                            if(image!=null) {
-                                image.get().toFile(saveTo, file -> {
-                                    if (file != null) {
-                                        image = null;
-                                        //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
-                                        arlImages.get(position).setImgPath(file.getPath());
-                                        Intent intent = new Intent(CameraActivity.this, MainActivity.class);
-                                        Bundle bundleObject = new Bundle();
-                                        bundleObject.putSerializable("data", arlImages);
-                                        bundleObject.putInt("pos", position);
-                                        bundleObject.putString("lan", "lan");
-                                        bundleObject.putString("from", "from");
-                                        intent.putExtras(bundleObject);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
+                            try {
+                                File saveTo = new File(directory, filename + ".jpg");
+                                if (image != null) {
+                                    image.get().toFile(saveTo, file -> {
+                                        if (file != null) {
+                                            image = null;
+                                            //Toast.makeText(CameraActivity.this, "Picture saved to " + file.getPath(), Toast.LENGTH_LONG).show();
+                                            arlImages.get(position).setImgPath(file.getPath());
+                                            Intent intent = new Intent(CameraActivity.this, MainActivity.class);
+                                            Bundle bundleObject = new Bundle();
+                                            bundleObject.putSerializable("data", arlImages);
+                                            bundleObject.putInt("pos", position);
+                                            bundleObject.putString("lan", "lan");
+                                            bundleObject.putString("from", "from");
+                                            intent.putExtras(bundleObject);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                }
+                            }catch (Exception e){
+                                Log.e("Exception",e.getMessage());
                             }
                         }
 
                     }
                 });
-
 
             }
 
@@ -318,7 +326,7 @@ public class CameraActivity extends AppCompatActivity implements MyListener {
 
                                 if(Pref.getIn(CameraActivity.this).getCamShowLatLng()){
                                     if(appLocationService.getLocation()!=null)
-                                    desc = desc + "\nLat: " + twoDecimalForm.format(appLocationService.getLatitude())+", Lng:"+twoDecimalForm.format(appLocationService.getLongitude());
+                                        desc = desc + "\nLat: " + twoDecimalForm.format(appLocationService.getLatitude())+", Lng:"+twoDecimalForm.format(appLocationService.getLongitude());
                                 }
 
                                 if(Pref.getIn(CameraActivity.this).getCamShowAddress()){
